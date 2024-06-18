@@ -1,15 +1,19 @@
 {
   "name": "web_crawler_js",
   "version": "1.0.0",
+  "type": "module",
   "description": "A simple web crawler in JS made as a project for my bootcamp on Boot.dev",
   "main": "node main.js",
   "scripts": {
     "start": "node main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "jest":{
+    "transform": {}
   },
   "author": "Saad Bin Masood",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^29.7.0"
+    "jest": "^27.0.6"
   }
 }
