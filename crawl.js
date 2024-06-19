@@ -16,10 +16,20 @@ function getURLsFromHTML(htmlBody, baseURL){
         // check if its a relative URL
         if (linkElement.href.slice(0,1) === '/'){
             // relative URL
-            urls.push(`${baseURL}${linkElement.href}`)
+            try{
+                const urlObj = new URL(`${baseURL}${linkElement.href}`)
+                urls.push(urlObj.href)
+            } catch(err){
+                console.log(`error with relative URL: ${err.message}`)
+            }
         }else{
             // absolute URL
-            urls.push(linkElement.href)
+            try{
+                const urlObj = new URL(linkElement.href)
+                urls.push(urlObj.href)
+            } catch(err){
+                console.log(`error with absolute URL: ${err.message}`)
+            }
         }
     }
     return urls 
