@@ -1,4 +1,5 @@
 const { crawlPage } = require('./crawl.js')
+const { printReport } = require('./report.js')
 
 async function main(){
     // the reason we are checking to exceed length of 3 is
@@ -17,10 +18,9 @@ async function main(){
     const baseURL = process.argv[2]
     console.log(`starting crawl of ${baseURL}`)
     const pages = await crawlPage(baseURL, baseURL, {})
+    // calling the report generator on the pages
+    printReport(pages)
 
-    for (const page of Object.entries(pages)){
-        console.log(page)
-    }
 }
 
 main()
