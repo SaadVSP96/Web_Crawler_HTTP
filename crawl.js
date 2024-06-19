@@ -5,11 +5,27 @@ const { JSDOM } = require('jsdom')
 async function crawlPage(currentURL){
     console.log(`actively crawling ${currentURL}`)
     // no need to specify method as fetch API uses GET by default
-    const response = await fetch(currentURL)
     // previously we were expecting response body to be formatted as json hence we used .json()
     // now we are expecting the response body to be HTML, hence we use .text(), and will 
     // parse it as text.
-    console.log(await response.text())
+    try{
+        const response = await fetch(currentURL)
+        // must check for bad status responses, i.e., more than 200s or 300s
+        if (response.status > 399){
+            console.log(`error in fetch with status code: ${response.status} on page: ${currentURL}`)
+            return null
+        }
+        // must also check and make sure we are recieving HTML from the fetch call
+        const contentType = response.headers.get("content-type")
+        if (!contentType.includes('text/html')){
+            console.log(`not HTML response, content type: ${contentType} on page: ${currentURL}`)
+            return null
+        }
+        console.log(await response.text())
+    }catch(err){
+        console.log(`error in fetch: ${err.message}, on page ${currentURL}`)
+    }
+
 }
 
 
