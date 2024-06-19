@@ -8,7 +8,7 @@ async function crawlPage(baseURL, currentURL, pages){
     // the scope of baseURL or the current website, if so, we return
     // early. Pages is how we keep track of the page's we've already 
     // crawled, pretty standard recursion stuff.
-    if (baseURL.hostname !== currentURL.hostname){
+    if (baseURLObj.hostname !== currentURLObj.hostname){
         return pages
     }
     // Now we need to check if we've already crawled this page. for this we
