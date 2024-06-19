@@ -1,6 +1,6 @@
 const { crawlPage } = require('./crawl.js')
 
-function main(){
+async function main(){
     // the reason we are checking to exceed length of 3 is
     // because it has some process.argv has some default 
     // argguments, first is the interpreter with its path,
@@ -16,7 +16,11 @@ function main(){
     }
     const baseURL = process.argv[2]
     console.log(`starting crawl of ${baseURL}`)
-    crawlPage(baseURL)
+    const pages = await crawlPage(baseURL, baseURL, {})
+
+    for (const page of Object.entries(pages)){
+        console.log(page)
+    }
 }
 
 main()

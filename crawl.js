@@ -34,13 +34,13 @@ async function crawlPage(baseURL, currentURL, pages){
         // must check for bad status responses, i.e., more than 200s or 300s
         if (response.status > 399){
             console.log(`error in fetch with status code: ${response.status} on page: ${currentURL}`)
-            return null
+            return pages
         }
         // must also check and make sure we are recieving HTML from the fetch call
         const contentType = response.headers.get("content-type")
         if (!contentType.includes('text/html')){
             console.log(`not HTML response, content type: ${contentType} on page: ${currentURL}`)
-            return null
+            return pages
         }
         // instead of logging all that HTML, lets save that in a variable:
         // console.log(await response.text())
