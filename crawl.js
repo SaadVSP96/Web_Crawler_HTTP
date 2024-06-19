@@ -1,6 +1,18 @@
 // importing the requisite classes
 const { JSDOM } = require('jsdom')
 
+// 
+async function crawlPage(currentURL){
+    console.log(`actively crawling ${currentURL}`)
+    // no need to specify method as fetch API uses GET by default
+    const response = await fetch(currentURL)
+    // previously we were expecting response body to be formatted as json hence we used .json()
+    // now we are expecting the response body to be HTML, hence we use .text(), and will 
+    // parse it as text.
+    console.log(await response.text())
+}
+
+
 // this function allows the web crawler to extract the 
 // links from the webpage's full HTML
 // the HTML will be an obvious first input
@@ -53,4 +65,5 @@ function normalizeURL(urlString){
 module.exports = {
     normalizeURL,
     getURLsFromHTML,
+    crawlPage,
 }

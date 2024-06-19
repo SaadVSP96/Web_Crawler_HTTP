@@ -1,4 +1,4 @@
-
+const { crawlPage } = require('./crawl.js')
 
 function main(){
     // the reason we are checking to exceed length of 3 is
@@ -16,6 +16,7 @@ function main(){
     }
     const baseURL = process.argv[2]
     console.log(`starting crawl of ${baseURL}`)
+    crawlPage(baseURL)
 }
 
 main()
