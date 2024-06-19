@@ -1,8 +1,29 @@
 // importing the requisite classes
 const { JSDOM } = require('jsdom')
 
-// 
-async function crawlPage(currentURL){
+async function crawlPage(baseURL, currentURL, pages){
+    const baseURLObj = new URL(baseURL)
+    const currentURLObj = new URL(currentURL)
+    // need to make sure if the link points to something outside 
+    // the scope of baseURL or the current website, if so, we return
+    // early. Pages is how we keep track of the page's we've already 
+    // crawled, pretty standard recursion stuff.
+    if (baseURL.hostname !== currentURL.hostname){
+        return pages
+    }
+    // Now we need to check if we've already crawled this page. for this we
+    // grab the normalized version of the current URL and then check if it 
+    // exists within the pages object.
+    // the pages object will contain the page URL against how many times 
+    // we've seen that page.
+    const normalizedCurrentURL = normalizeURL(currentURL)
+    if (pages[normalizedCurrentURL] > 0){
+        pages[normalizedCurrentURL] ++
+        return pages
+    }
+    // if we've made it this far, pages should have an entry initialized for
+    // this new page:
+    pages[normalizedCurrentURL] = 1
     console.log(`actively crawling ${currentURL}`)
     // no need to specify method as fetch API uses GET by default
     // previously we were expecting response body to be formatted as json hence we used .json()
@@ -21,11 +42,23 @@ async function crawlPage(currentURL){
             console.log(`not HTML response, content type: ${contentType} on page: ${currentURL}`)
             return null
         }
-        console.log(await response.text())
+        // instead of logging all that HTML, lets save that in a variable:
+        // console.log(await response.text())
+        const htmlBody = await response.text()
+        // the next step would be to extract the links from the HTML body we 
+        // get from above line and we've  already got the function to do that:
+        nextURLs = getURLsFromHTML(htmlBody, baseURL)
+        // and now, you guessed it, we'll call the samme function recursively on
+        // the nextURLs
+        for (const nextURL of nextURLs){
+            pages = await crawlPage(baseURL, nextURL, pages)
+        }
+
     }catch(err){
         console.log(`error in fetch: ${err.message}, on page ${currentURL}`)
     }
-
+    // when all the pages have been crawled, we just return the pages object:
+    return pages
 }
 
 
